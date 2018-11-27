@@ -1,0 +1,23 @@
+const char notfound_html[] PROGMEM = R"=====(
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <title>WordClock | Site not found</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <span class="navbar-brand">WordClock</span>
+    </nav>
+    <main class="container" role="main">
+        <div class="starter-template">
+            <h1>Site not found!</h1>
+        </div>
+    </main>
+</body>
+</html>
+)=====";
