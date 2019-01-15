@@ -28,7 +28,6 @@ void handleLED() {
   new_state = server.arg("LEDstate");
 
 if(new_state == "COLOR") {
-    strip.setWc_animationId("color");
     wc_color_t c;
     c.red = server.arg("colorR").toInt();
     c.green = server.arg("colorG").toInt();
@@ -38,8 +37,6 @@ if(new_state == "COLOR") {
     strip.setWc_animationId(server.arg("animation_id"));
     strip.setWc_animationDuration(server.arg("animation_duration").toInt());
     strip.setWc_animationTimeout(server.arg("animation_timeout").toInt());
-  } else if(new_state == "TIME") {
-
   }
 
   server.send(200, "text/plane", new_state);

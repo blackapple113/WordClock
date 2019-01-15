@@ -61,6 +61,11 @@ int Adafruit_Wordclock::getHours(uint32_t UNIXTime) {
 
 Adafruit_Wordclock::Adafruit_Wordclock(uint16_t n, uint8_t p, neoPixelType t) : Adafruit_NeoPixel(n, p, t)
 {
+    wc_color_t c;
+    c.red = 127;
+    c.green = 127;
+    c.blue = 127;
+    setWc_animationColor(c);
 }
 
 Adafruit_Wordclock::Adafruit_Wordclock(void) : Adafruit_NeoPixel()
@@ -121,20 +126,21 @@ void Adafruit_Wordclock::setupCommunication() {
 
     while(!WiFi.hostByName(NTPServerName, timeServerIP)) { // Get the IP address of the NTP server
         Serial.println("DNS lookup failed. Rebooting.");
+        delay(500);
     }
 }
 
 void Adafruit_Wordclock::handleAnimations() {
-    static Color activeColor {Color(127,127,127)};
-
-    if(wc_animation.id == "color") {
+    if(wc_animation.id == "time") {
         for(uint16_t i = 0; i < numPixels(); ++i) {
-            activeColor = Color(wc_animation.color.red, wc_animation.color.green, wc_animation.color.blue);
-            setPixelColor(i, activeColor);
+            if(ref[i]) {
+                setPixelColor(i, Color(wc_animation.color.red, wc_animation.color.green, wc_animation.color.blue));
+            } else {
+                setPixelColor(i, Color(0, 0, 0));
+            }
         }
         show();
         setWc_animationId("");
-        Serial.print("Farbe geändert");
     } else if(wc_animation.id == "rainbow") {
         if((millis()-previousTime) >= wc_animation.timeout) {
             previousTime = millis();
@@ -144,16 +150,6 @@ void Adafruit_Wordclock::handleAnimations() {
             }
             show();
         } 
-    } else if(wc_animation.id = "time") {
-        resetRef();
-        for(uint16_t i = 0; i < numPixels(); ++i) {
-            if(ref[i]) {
-                setPixelColor(i, activeColor);
-            } else {
-                setPixelColor(i, Color(0,0,0));
-            }
-        }
-        show();
     }
 }
 
@@ -236,12 +232,6 @@ void Adafruit_Wordclock::setPosMin(uint8_t min) {
             ref[101] = false;
             ref[12] = false;
             ref[0] = false;
-    }
-
-    int z = 110;
-    for(int i = min; i%5 > 0; --i) {
-        ref[z] = true;
-        ++z;
     }
 
     uint8_t min_5 = min - min%5;
@@ -349,5 +339,12 @@ void Adafruit_Wordclock::handleTime() {
         setTime(getHours(actualTime), getMinutes(actualTime));
         setWc_animationId("time");
         setWc_animationTime(getHours(actualTime), getMinutes(actualTime));
+        for(int i = 0; i < SIZE; ++i) {
+            if(ref[i]) {
+                Serial.print("1");
+            } else {
+                Serial.print("0");
+            }
+        }
     }  
 }
