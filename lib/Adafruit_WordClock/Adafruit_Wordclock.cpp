@@ -125,9 +125,12 @@ void Adafruit_Wordclock::setupCommunication() {
 }
 
 void Adafruit_Wordclock::handleAnimations() {
+    static Color activeColor {Color(127,127,127)};
+
     if(wc_animation.id == "color") {
         for(uint16_t i = 0; i < numPixels(); ++i) {
-            setPixelColor(i, Color(wc_animation.color.red, wc_animation.color.green, wc_animation.color.blue));
+            activeColor = Color(wc_animation.color.red, wc_animation.color.green, wc_animation.color.blue);
+            setPixelColor(i, activeColor);
         }
         show();
         setWc_animationId("");
@@ -142,15 +145,15 @@ void Adafruit_Wordclock::handleAnimations() {
             show();
         } 
     } else if(wc_animation.id = "time") {
+        resetRef();
         for(uint16_t i = 0; i < numPixels(); ++i) {
             if(ref[i]) {
-                setPixelColor(i, Color(127,127,127));
+                setPixelColor(i, activeColor);
             } else {
                 setPixelColor(i, Color(0,0,0));
             }
         }
         show();
-        resetRef();
     }
 }
 
