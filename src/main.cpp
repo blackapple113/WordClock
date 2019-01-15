@@ -15,12 +15,6 @@
 const char* wifi_ssid="WordClock";
 const char* wifi_pwd="1234567890";
 
-// const char* wifi_ssid="NWLAN Gast";
-// const char* wifi_pwd="19090808";
-
-// const char* wifi_ssid="RoteWucht";
-// const char* wifi_pwd="70777687578076323836";
-
 //Erstellen einer Instanz für das Senden und Empfangen über UDP
 WiFiUDP UDP;
 
@@ -30,15 +24,6 @@ Adafruit_Wordclock strip = Adafruit_Wordclock(120, LED_PIN, NEO_GRB + NEO_KHZ800
 String new_state = "";
 
 ESP8266WebServer server(80);
-
-//Starte UDP auf einem Port
-void startUDP() {
-  Serial.println("Starting UDP");
-  UDP.begin(123);
-  Serial.print("Local port: ");
-  Serial.println(UDP.localPort());
-  Serial.println();
-}
 
 //Methode zum derzeitigen einstellen der vom Client
 //übergebenen Daten zur LED steuerung
