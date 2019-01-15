@@ -55,6 +55,11 @@ class Adafruit_Wordclock : public Adafruit_NeoPixel {
     unsigned long globalTimeout;
     uint16_t globalColorCount = 0;
 
+    uint32_t getTime();
+    void sendNTPpacket(IPAddress& address);
+    int getMinutes(uint32_t UNIXTime);
+    int getHours(uint32_t UNIXTime);
+
     public:
     //constructors
     Adafruit_Wordclock(uint16_t n, uint8_t p=4, neoPixelType t=NEO_GRB + NEO_KHZ800);
@@ -71,7 +76,9 @@ class Adafruit_Wordclock : public Adafruit_NeoPixel {
     const unsigned long getWc_animationDuration();
 
     //various methods
+    void setupCommunication();
     void handleAnimations();
+    void handleTime();
 };
 
 #endif
