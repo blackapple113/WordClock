@@ -30,14 +30,14 @@ const char index_html[] PROGMEM = R"=====(
             xhttp.send();
         }
 
-        function animation() {
+        function animation(id) {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if(this.readyState == 4 && this.status == 200) {
                     document.getElementById("LED_rainbow").innerHTML = this.responseText;
                 }
             }
-            xhttp.open("GET", "setLED?LEDstate=ani&animation=rainbow");
+            xhttp.open("GET", "setLED?LEDstate=ANIMATION&animation_id=rainbow&animation_duration=2000&animation_timeout=40");
             xhttp.send();
         }
         function startTime() {

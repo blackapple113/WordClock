@@ -6,7 +6,7 @@ Goal of this library is to create animations while running and
 listening to userinput from a webinterface.
 --------------------------------------------------------------------*/
 
-#include "Adafruit_Wordclock.hh"
+#include "Adafruit_Wordclock.h"
 
 Adafruit_Wordclock::Adafruit_Wordclock(uint16_t n, uint8_t p, neoPixelType t) : Adafruit_NeoPixel(n, p, t)
 {
@@ -41,16 +41,38 @@ const unsigned long Adafruit_Wordclock::getWc_animationDuration() {
     return wc_animation.duration;
 }
 
-void Adafruit_Wordclock::handleAnimations() {
-    if(this->wc_change != wc_animation) {
-        wc_change = wc_animation;
-        if(wc_animation.id == "color") {
-            for(uint16_t i = 0; i < numPixels(); ++i) {
-                setPixelColor(i, Color(wc_animation.color.red, wc_animation.color.green, wc_animation.color.blue));
-            }
-            show();
-        }
+uint32_t Wheel(byte WheelPos)
+{
+    WheelPos = 255 - WheelPos;
+    if (WheelPos < 85)
+    {
+        return Adafruit_NeoPixel::Color(255 - WheelPos * 3, 0, WheelPos * 3);
     }
+    if (WheelPos < 170)
+    {
+        WheelPos -= 85;
+        return Adafruit_NeoPixel::Color(0, WheelPos * 3, 255 - WheelPos * 3);
+    }
+    WheelPos -= 170;
+    return Adafruit_NeoPixel::Color(WheelPos * 3, 255 - WheelPos * 3, 0);
 }
 
-
+void Adafruit_Wordclock::handleAnimations() {
+    if(wc_animation.id == "color") {
+        for(uint16_t i = 0; i < numPixels(); ++i) {
+            setPixelColor(i, Color(wc_animation.color.red, wc_animation.color.green, wc_animation.color.blue));
+        }
+        show();
+        setWc_animationId("");
+        Serial.print("Farbe geändert");
+    } else if(wc_animation.id == "rainbow") {
+        if((millis()-previousTime) >= wc_animation.timeout) {
+            previousTime = millis();
+            globalColorCount = (globalColorCount+1)%256;
+            for(uint16_t i = 0; i < numPixels(); ++i) {
+                setPixelColor(i, Wheel((i+globalColorCount) & 255));
+            }
+            show();
+        } 
+    }
+}

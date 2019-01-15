@@ -5,8 +5,8 @@ Goal of this library is to create animations while running and
 listening to userinput from a webinterface.
 --------------------------------------------------------------------*/
 
-#ifndef ADAFRUIT_WORDCLOCK_HH
-#define ADAFRUIT_WORDCLOCK_HH
+#ifndef ADAFRUIT_WORDCLOCK_H
+#define ADAFRUIT_WORDCLOCK_H
 
 #include <Adafruit_NeoPixel.h>
 
@@ -50,7 +50,10 @@ struct wc_anidata_t{
 class Adafruit_Wordclock : public Adafruit_NeoPixel {
     private:
     wc_anidata_t wc_animation;
-    wc_anidata_t wc_change;
+    unsigned long currentTime;
+    unsigned long previousTime;
+    unsigned long globalTimeout;
+    uint16_t globalColorCount = 0;
 
     public:
     //constructors
