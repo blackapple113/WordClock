@@ -16,7 +16,7 @@ const char* wifi_ssid="WordClock";
 const char* wifi_pwd="1234567890";
 
 //Initialisierung des LED-Streifens der WordClock
-Adafruit_Wordclock strip = Adafruit_Wordclock(120, LED_PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_Wordclock strip = Adafruit_Wordclock(114, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 String new_state = "";
 
@@ -76,12 +76,10 @@ void setup() {
   WiFi.mode(WIFI_STA);
   WiFi.begin(wifi_ssid, wifi_pwd);
 
-  strip.setupCommunication();
-
   int x = 0;
   int cnt = 0;
 
-  while(WiFi.status() != WL_CONNECTED && strip.getTime() == 0) {
+  while(WiFi.status() != WL_CONNECTED) {
     for(uint16_t i = 0; i < strip.numPixels(); ++i) {
       if(i >= 71 && i <= 74) {
         strip.setPixelColor(i, strip.Color(x,x,x));
@@ -108,6 +106,9 @@ void setup() {
   Serial.print("IP address: ");
   Serial.print(WiFi.localIP());
   Serial.println();
+
+  strip.setupCommunication();
+
 
   handleServer();
 
